@@ -27,20 +27,45 @@ final class AddFeatureTest extends TestCase
 {
     use CanCheckParticipantsOverConversationsTrait;
     
-    public function test_chat_adds_model_of_conversations_participant_after_conversation_creation(): void
+    public function test_chat_can_add_single_participant_to_conversation_after_it_was_created(): void
     {
-        $participant = User::factory()->create();
+        $participant = $this->createParticipants();
 
-        $conversation1 = Chat::createConversation();
-        $conversation2 = Chat::conversations()->create();
+        $conversations = $this->createConversations();
 
-        Chat::conversations()->set($conversation1)->add($participant);
-        Chat::conversations()->set($conversation2)->add($participant);
+        Chat::conversations()->set($conversations[1])->add($participant);
+        Chat::conversations()->set($conversations[2])->add($participant);
 
-        $this->checkParticipantsOverConversations(
-            $participant, [$conversation1, $conversation2]
-        );
-        $this->assertCount(count([$participant]), $conversation1->participants);
-        $this->assertCount(count([$participant]), $conversation2->participants);
+        $this->checkParticipantsOverConversations($participant, $conversations);
+        $this->assertCount(count([$participant]), $conversations[1]->participants);
+        $this->assertCount(count([$participant]), $conversations[2]->participants);
+    }
+    
+    public function test_chat_can_add_array_participants_to_conversation_after_it_was_created(): void
+    {
+        $participants = $this->createParticipants(count: 2, arr: true);
+
+        $conversations = $this->createConversations();
+
+        Chat::conversations()->set($conversations[1])->add($participants);
+        Chat::conversations()->set($conversations[2])->add($participants);
+
+        $this->checkParticipantsOverConversations($participants, $conversations);
+        $this->assertCount(count($participants), $conversations[1]->participants);
+        $this->assertCount(count($participants), $conversations[2]->participants);
+    }
+    
+    public function test_chat_can_add_collection_participants_to_conversation_after_it_was_created(): void
+    {
+        $participants = $this->createParticipants(count: 2, arr: false);
+
+        $conversations = $this->createConversations();
+
+        Chat::conversations()->set($conversations[1])->add($participants);
+        Chat::conversations()->set($conversations[2])->add($participants);
+
+        $this->checkParticipantsOverConversations($participants, $conversations);
+        $this->assertCount(count($participants), $conversations[1]->participants);
+        $this->assertCount(count($participants), $conversations[2]->participants);
     }
 }

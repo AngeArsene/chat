@@ -7,10 +7,7 @@ namespace AngeArsene\Chat\Tests\Feature\Conversation;
 use AngeArsene\Chat\Facades\Chat;
 use AngeArsene\Chat\Tests\TestCase;
 use AngeArsene\Chat\Chat as ChatChat;
-use AngeArsene\Chat\Tests\Models\Book;
-use AngeArsene\Chat\Tests\Models\User;
 use AngeArsene\Chat\Models\Conversation;
-use Illuminate\Database\Eloquent\Collection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -30,18 +27,6 @@ use AngeArsene\Chat\Tests\Concerns\CanCheckParticipantsOverConversationsTrait;
 final class CreateFeatureTest extends TestCase
 {
     use CanCheckParticipantsOverConversationsTrait;
-    
-    private function createConversations(
-        null |
-        array |
-        Collection |
-        ConversationParticipantInterface $participants = null
-    ): array {
-        $conversation1 = Chat::conversations()->create($participants);
-        $conversation2 = Chat::createConversation($participants);
-
-        return [1 => $conversation1, $conversation2];
-    }
 
     public static function convProvider(): array
     {
@@ -50,25 +35,6 @@ final class CreateFeatureTest extends TestCase
                 ['id' => 1], ['id' => 2]
             ]
         ];
-    }
-
-    private function createParticipants(?bool $isValid = true, ?int $count = 1, ?bool $arr = false): mixed
-    {
-        $participants = [];
-
-        if (!$arr) {
-            $participants = $isValid
-                ? User::factory($count)->create()
-                : Book::factory($count)->create();
-        } else {
-            for ($i = 1; $i <= $count; $i++) {
-                $participants[] = $isValid
-                    ? User::factory()->create()
-                    : Book::factory()->create();
-            }
-        }
-
-        return count($participants) === 1 ? $participants[0] : $participants;
     }
 
     #[DataProvider('convProvider')]
