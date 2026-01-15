@@ -14,7 +14,7 @@ use AngeArsene\Chat\Contracts\ConversationParticipantInterface;
 /**
  * 
  */
-trait CanCheckParticipantsOverConversationsTrait
+trait ManagesParticipantAssertions
 {
     private function checkParticipantsOverConversations(
         array | Collection | ConversationParticipantInterface $participants,

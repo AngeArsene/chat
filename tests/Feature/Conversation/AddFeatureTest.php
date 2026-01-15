@@ -7,13 +7,12 @@ namespace AngeArsene\Chat\Tests\Feature\Conversation;
 use AngeArsene\Chat\Facades\Chat;
 use AngeArsene\Chat\Tests\TestCase;
 use AngeArsene\Chat\Chat as ChatChat;
-use AngeArsene\Chat\Tests\Models\User;
 use AngeArsene\Chat\Models\Conversation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use AngeArsene\Chat\Services\ConversationService;
 use AngeArsene\Chat\Providers\ChatServiceProvider;
-use AngeArsene\Chat\Tests\Concerns\CanCheckParticipantsOverConversationsTrait;
+use AngeArsene\Chat\Tests\Concerns\ManagesParticipantAssertions;
 
 #[CoversClass(Chat::class)]
 #[CoversClass(ChatChat::class)]
@@ -25,7 +24,7 @@ use AngeArsene\Chat\Tests\Concerns\CanCheckParticipantsOverConversationsTrait;
 #[CoversMethod(ConversationService::class, '__construct')]
 final class AddFeatureTest extends TestCase
 {
-    use CanCheckParticipantsOverConversationsTrait;
+    use ManagesParticipantAssertions;
     
     public function test_chat_can_add_single_participant_to_conversation_after_it_was_created(): void
     {

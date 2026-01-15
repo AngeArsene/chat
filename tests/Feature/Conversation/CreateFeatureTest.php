@@ -14,7 +14,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 use AngeArsene\Chat\Services\ConversationService;
 use AngeArsene\Chat\Providers\ChatServiceProvider;
 use AngeArsene\Chat\Contracts\ConversationParticipantInterface;
-use AngeArsene\Chat\Tests\Concerns\CanCheckParticipantsOverConversationsTrait;
+use AngeArsene\Chat\Tests\Concerns\ManagesParticipantAssertions;
 
 #[CoversClass(Chat::class)]
 #[CoversClass(ChatChat::class)]
@@ -26,7 +26,7 @@ use AngeArsene\Chat\Tests\Concerns\CanCheckParticipantsOverConversationsTrait;
 #[CoversMethod(ConversationService::class, '__construct')]
 final class CreateFeatureTest extends TestCase
 {
-    use CanCheckParticipantsOverConversationsTrait;
+    use ManagesParticipantAssertions;
 
     public static function convProvider(): array
     {
