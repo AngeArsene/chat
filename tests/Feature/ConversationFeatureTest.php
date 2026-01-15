@@ -36,11 +36,11 @@ final class ConversationFeatureTest extends TestCase
     {
         $conv = Chat::conversations()->create();
 
-        $convers = Chat::conversations()->getById($conv);
-        $conversation = Chat::conversations()->getById($conv->id);
+        $conversation1 = Chat::conversations()->getById($conv);
+        $conversation2 = Chat::conversations()->getById($conv->id);
 
-        $this->assertEquals($conv->id, $convers->id);
-        $this->assertEquals($conv->id, $conversation->id);
+        $this->assertEquals($conv->id, $conversation1->id);
+        $this->assertEquals($conv->id, $conversation2->id);
     }
 
     private function checkParticipantsOverConversations(
@@ -173,12 +173,17 @@ final class ConversationFeatureTest extends TestCase
     {
         $participant = User::factory()->create();
 
-        $conversation = Chat::conversations()->create();
+        $conversation1 = Chat::createConversation();
+        $conversation2 = Chat::conversations()->create();
 
-        Chat::conversations()->set($conversation)->add($participant);
+        Chat::conversations()->set($conversation1)->add($participant);
+        Chat::conversations()->set($conversation2)->add($participant);
 
-        $this->checkParticipantsOverConversations($participant, $conversation);
-        $this->assertCount(count([$participant]), $conversation->participants);
+        $this->checkParticipantsOverConversations(
+            $participant, [$conversation1, $conversation2]
+        );
+        $this->assertCount(count([$participant]), $conversation1->participants);
+        $this->assertCount(count([$participant]), $conversation2->participants);
     }
 
     public function test_chat_adds_array_of_conversations_participants_after_conversation_creation(): void
@@ -188,23 +193,34 @@ final class ConversationFeatureTest extends TestCase
 
         $participants = [$ange, $arsene];
 
-        $conversation = Chat::conversations()->create();
+        $conversation1 = Chat::createConversation();
+        $conversation2 = Chat::conversations()->create();
 
-        Chat::conversations()->set($conversation)->add($participants);
+        Chat::conversations()->set($conversation1)->add($participants);
+        Chat::conversations()->set($conversation2)->add($participants);
 
-        $this->checkParticipantsOverConversations($participants, $conversation);
-        $this->assertCount(count($participants), $conversation->participants);
+        $this->checkParticipantsOverConversations(
+            $participants, [$conversation1, $conversation2]
+        );
+        $this->assertCount(count($participants), $conversation1->participants);
+        $this->assertCount(count($participants), $conversation2->participants);
     }
 
     public function test_chat_adds_collection_of_conversations_participants_after_conversation_creation(): void
     {
         $participants = User::factory(2)->create();
-        $conversation = Chat::conversations()->create();
 
-        Chat::conversations()->set($conversation)->add($participants);
+        $conversation1 = Chat::createConversation();
+        $conversation2 = Chat::conversations()->create();
 
-        $this->checkParticipantsOverConversations($participants, $conversation);
-        $this->assertCount(count($participants), $conversation->participants);
+        Chat::conversations()->set($conversation1)->add($participants);
+        Chat::conversations()->set($conversation2)->add($participants);
+
+        $this->checkParticipantsOverConversations(
+            $participants, [$conversation1, $conversation2]
+        );
+        $this->assertCount(count($participants), $conversation1->participants);
+        $this->assertCount(count($participants), $conversation2->participants);
     }
 
     public function test_chat_throws_exception_when_non_conversation_participant_model_is_parsed_to_remove(): void
@@ -295,10 +311,7 @@ final class ConversationFeatureTest extends TestCase
 
     public function test_chat_removes_collection_of_conversations_participants_after_conversation_creation(): void
     {
-        $participants = User::factory()->count(2)->sequence(
-            ['name' => 'Ange'],
-            ['name' => 'Arsene']
-        )->create();
+        $participants = User::factory(2)->create();
 
         $conversation = Chat::createConversation();
 

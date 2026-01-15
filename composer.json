@@ -23,7 +23,8 @@
         "psr-4": {
             "AngeArsene\\Chat\\Tests\\": "tests/",
             "AngeArsene\\Chat\\Tests\\Models\\": "tests/helpers/models/",
-            "AngeArsene\\Chat\\Tests\\Database\\Tests\\Factories\\": "tests/helpers/database/factories/"
+            "AngeArsene\\Chat\\Tests\\Concerns\\": "tests/helpers/concerns/",
+            "AngeArsene\\Chat\\Tests\\Database\\Factories\\": "tests/helpers/database/factories/"
         }
     },
     "authors": [

@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace AngeArsene\Chat\Tests;
 
+use AngeArsene\Chat\Contracts\ConversationParticipantInterface;
+use AngeArsene\Chat\Models\Conversation;
+use Illuminate\Database\Eloquent\Collection;
+
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
     public function setUp(): void
@@ -33,7 +37,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
         parent::tearDown();
     }
-    
+
     protected function getPackageProviders($app)
     {
         return [
@@ -48,17 +52,17 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         ];
     }
 
-    private function migrate(string $direction): void
+    private function migrate(string $upOrDown): void
     {
         $migrations_directories = [
-            'core_migrations' => dirname(__DIR__).'/database/migrations',
-            'test_migrations' => __DIR__.'/helpers/database/migrations'
+            'core_migrations' => dirname(__DIR__) . '/database/migrations',
+            'test_migrations' => __DIR__ . '/helpers/database/migrations'
         ];
 
         foreach ($migrations_directories as $migrations_dir) {
             foreach (scandir($migrations_dir) as $migration) {
                 if ($migration !== '.' && $migration !== '..') {
-                    (require "$migrations_dir/$migration")->{$direction}();
+                    (require "$migrations_dir/$migration")->{$upOrDown}();
                 }
             }
         }
