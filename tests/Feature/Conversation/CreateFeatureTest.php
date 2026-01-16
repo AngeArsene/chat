@@ -60,10 +60,7 @@ final class CreateFeatureTest extends TestCase
 
         $conversations = $this->createConversations($participant);
 
-        $this->checkParticipantsOverConversations($participant, $conversations);
-
-        $this->assertCount(count([$participant]), $conversations[1]->participants);
-        $this->assertCount(count([$participant]), $conversations[2]->participants);
+        $this->assertParticipantsInConversations($participant, $conversations);
     }
 
     public function test_chat_cannot_create_conversations_with_single_invalid_participant(): void
@@ -81,10 +78,7 @@ final class CreateFeatureTest extends TestCase
 
         $conversations = $this->createConversations($participants);
 
-        $this->checkParticipantsOverConversations($participants, $conversations);
-
-        $this->assertCount(count($participants), $conversations[1]->participants);
-        $this->assertCount(count($participants), $conversations[2]->participants);
+        $this->assertParticipantsInConversations($participants, $conversations);
     }
 
     public function test_chat_cannot_create_conversations_with_array_invalid_participants(): void
@@ -102,10 +96,7 @@ final class CreateFeatureTest extends TestCase
 
         $conversations = $this->createConversations($participants);
 
-        $this->checkParticipantsOverConversations($participants, $conversations);
-
-        $this->assertCount(count($participants), $conversations[1]->participants);
-        $this->assertCount(count($participants), $conversations[2]->participants);
+        $this->assertParticipantsInConversations($participants, $conversations);
     }
 
     public function test_chat_cannot_create_conversations_with_collection_invalid_participants(): void

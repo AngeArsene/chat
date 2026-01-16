@@ -35,9 +35,7 @@ final class AddFeatureTest extends TestCase
         Chat::conversations()->set($conversations[1])->add($participant);
         Chat::conversations()->set($conversations[2])->add($participant);
 
-        $this->checkParticipantsOverConversations($participant, $conversations);
-        $this->assertCount(count([$participant]), $conversations[1]->participants);
-        $this->assertCount(count([$participant]), $conversations[2]->participants);
+        $this->assertParticipantsInConversations($participant, $conversations);
     }
     
     public function test_chat_cannot_add_single_non_participant_to_conversation_after_it_was_created(): void
@@ -61,9 +59,7 @@ final class AddFeatureTest extends TestCase
         Chat::conversations()->set($conversations[1])->add($participants);
         Chat::conversations()->set($conversations[2])->add($participants);
 
-        $this->checkParticipantsOverConversations($participants, $conversations);
-        $this->assertCount(count($participants), $conversations[1]->participants);
-        $this->assertCount(count($participants), $conversations[2]->participants);
+        $this->assertParticipantsInConversations($participants, $conversations);
     }
     
     public function test_chat_cannot_add_array_non_participants_to_conversation_after_it_was_created(): void
@@ -87,9 +83,7 @@ final class AddFeatureTest extends TestCase
         Chat::conversations()->set($conversations[1])->add($participants);
         Chat::conversations()->set($conversations[2])->add($participants);
 
-        $this->checkParticipantsOverConversations($participants, $conversations);
-        $this->assertCount(count($participants), $conversations[1]->participants);
-        $this->assertCount(count($participants), $conversations[2]->participants);
+        $this->assertParticipantsInConversations($participants, $conversations);
     }
     
     public function test_chat_cannot_add_collection_non_participants_to_conversation_after_it_was_created(): void

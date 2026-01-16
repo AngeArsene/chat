@@ -76,4 +76,16 @@ trait ManagesParticipantAssertions
 
         return [1 => $conversation1, $conversation2];
     }
+
+    private function assertParticipantsInConversations(mixed $participants, array $conversations): void
+    {
+        $participants = (is_array($participants) || $participants instanceof Collection)
+            ? $participants
+            : [$participants];
+
+        $this->checkParticipantsOverConversations($participants, $conversations);
+
+        $this->assertCount(count($participants), $conversations[1]->participants);
+        $this->assertCount(count($participants), $conversations[2]->participants);
+    }
 }
