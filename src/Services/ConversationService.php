@@ -8,9 +8,12 @@ use AngeArsene\Chat\Models\Conversation;
 use AngeArsene\Chat\Models\Participation;
 use Illuminate\Database\Eloquent\Collection;
 use AngeArsene\Chat\Contracts\ConversationParticipantInterface;
+use AngeArsene\Chat\Concerns\NormalizesParticipantsOrConversations;
 
 final class ConversationService
 {
+    use NormalizesParticipantsOrConversations;
+
     public function __construct(
         private Conversation $conversation,
         private Participation $participation
@@ -52,9 +55,7 @@ final class ConversationService
         Collection |
         ConversationParticipantInterface $participants = null
     ): self {
-        $participants = is_array($participants) || $participants instanceof Collection
-            ? $participants
-            : (is_null($participants) ? null : [$participants]);
+        $participants = $this->normalize($participants);
 
         if ($participants !== null) {
             $participations = [];
@@ -81,9 +82,7 @@ final class ConversationService
         Collection |
         ConversationParticipantInterface $participants = null
     ): self {
-        $participants = is_array($participants) || $participants instanceof Collection
-            ? $participants
-            : (is_null($participants) ? null : [$participants]);
+        $participants = $this->normalize($participants);
 
         if ($participants !== null) {
             foreach ($participants as $participant) {

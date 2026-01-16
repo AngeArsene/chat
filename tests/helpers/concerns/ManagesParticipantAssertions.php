@@ -10,23 +10,22 @@ use AngeArsene\Chat\Tests\Models\User;
 use AngeArsene\Chat\Models\Conversation;
 use Illuminate\Database\Eloquent\Collection;
 use AngeArsene\Chat\Contracts\ConversationParticipantInterface;
+use AngeArsene\Chat\Concerns\NormalizesParticipantsOrConversations;
 
 /**
  * 
  */
 trait ManagesParticipantAssertions
 {
+    use NormalizesParticipantsOrConversations;
+
     private function checkParticipantsOverConversations(
         array | Collection | ConversationParticipantInterface $participants,
         array | Collection | Conversation $conversations
     ): void {
-        $participants = (is_array($participants) || $participants instanceof Collection)
-            ? $participants
-            : [$participants];
+        $participants = $this->normalizeNotNull($participants);
 
-        $conversations = (is_array($conversations) || $conversations instanceof Collection)
-            ? $conversations
-            : [$conversations];
+        $conversations = $this->normalizeNotNull($conversations);
 
         $this->assertDatabaseCount('participations', count($participants) * count($conversations));
 
@@ -79,9 +78,7 @@ trait ManagesParticipantAssertions
 
     private function assertParticipantsInConversations(mixed $participants, array $conversations): void
     {
-        $participants = (is_array($participants) || $participants instanceof Collection)
-            ? $participants
-            : [$participants];
+        $participants = $this->normalizeNotNull($participants);
 
         $this->checkParticipantsOverConversations($participants, $conversations);
 

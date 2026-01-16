@@ -9,10 +9,12 @@ use AngeArsene\Chat\Tests\TestCase;
 use AngeArsene\Chat\Chat as ChatChat;
 use AngeArsene\Chat\Models\Conversation;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use AngeArsene\Chat\Services\ConversationService;
 use AngeArsene\Chat\Providers\ChatServiceProvider;
 use AngeArsene\Chat\Tests\Concerns\ManagesParticipantAssertions;
+use AngeArsene\Chat\Concerns\NormalizesParticipantsOrConversations;
 
 #[CoversClass(Chat::class)]
 #[CoversClass(ChatChat::class)]
@@ -22,6 +24,7 @@ use AngeArsene\Chat\Tests\Concerns\ManagesParticipantAssertions;
 #[CoversMethod(ConversationService::class, 'add')]
 #[CoversMethod(ConversationService::class, 'create')]
 #[CoversMethod(ConversationService::class, '__construct')]
+#[CoversTrait(NormalizesParticipantsOrConversations::class)]
 final class AddFeatureTest extends TestCase
 {
     use ManagesParticipantAssertions;
