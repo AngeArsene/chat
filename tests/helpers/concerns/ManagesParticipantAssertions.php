@@ -23,9 +23,9 @@ trait ManagesParticipantAssertions
         array | Collection | ConversationParticipantInterface $participants,
         array | Collection | Conversation $conversations
     ): void {
-        $participants = $this->normalizeNotNull($participants);
+        $participants = $this->normalizeNotToNull($participants);
 
-        $conversations = $this->normalizeNotNull($conversations);
+        $conversations = $this->normalizeNotToNull($conversations);
 
         $this->assertDatabaseCount('participations', count($participants) * count($conversations));
 
@@ -78,7 +78,7 @@ trait ManagesParticipantAssertions
 
     private function assertParticipantsInConversations(mixed $participants, array $conversations): void
     {
-        $participants = $this->normalizeNotNull($participants);
+        $participants = $this->normalizeNotToNull($participants);
 
         $this->checkParticipantsOverConversations($participants, $conversations);
 

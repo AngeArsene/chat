@@ -37,7 +37,7 @@ trait NormalizesParticipantsOrConversations
     /**
      * Normalize participants to array, converting null to empty array.
      */
-    protected function normalizeNotNull(
+    protected function normalizeNotToNull(
         array |
         Collection |
         Conversation |
