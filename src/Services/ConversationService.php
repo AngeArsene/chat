@@ -20,7 +20,7 @@ final class ConversationService
     ) {
     }
 
-    public function getById(Conversation | int $conversation): Conversation
+    public function get(Conversation | int $conversation): Conversation
     {
         return $this->conversation->find(
             is_int($conversation)

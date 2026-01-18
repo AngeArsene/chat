@@ -23,7 +23,7 @@ use AngeArsene\Chat\Concerns\NormalizesParticipantsOrConversations;
 #[CoversMethod(ConversationService::class, 'set')]
 #[CoversMethod(ConversationService::class, 'add')]
 #[CoversMethod(ConversationService::class, 'create')]
-#[CoversMethod(ConversationService::class, 'getById')]
+#[CoversMethod(ConversationService::class, 'get')]
 #[CoversMethod(ConversationService::class, '__construct')]
 #[CoversTrait(NormalizesParticipantsOrConversations::class)]
 final class GetFeatureTest extends TestCase
@@ -34,8 +34,8 @@ final class GetFeatureTest extends TestCase
     {
         $conv = $this->createConversations();
 
-        $conversation1 = Chat::conversations()->getById($conv[1]->id);
-        $conversation2 = Chat::conversations()->getById($conv[2]->id);
+        $conversation1 = Chat::conversations()->get($conv[1]->id);
+        $conversation2 = Chat::conversations()->get($conv[2]->id);
 
         $this->assertEquals($conv[1]->id, $conversation1->id);
         $this->assertEquals($conv[2]->id, $conversation2->id);
@@ -45,8 +45,8 @@ final class GetFeatureTest extends TestCase
     {
         $conv = $this->createConversations();
 
-        $conversation1 = Chat::conversations()->getById($conv[1]);
-        $conversation2 = Chat::conversations()->getById($conv[2]);
+        $conversation1 = Chat::conversations()->get($conv[1]);
+        $conversation2 = Chat::conversations()->get($conv[2]);
 
         $this->assertEquals($conv[1]->id, $conversation1->id);
         $this->assertEquals($conv[2]->id, $conversation2->id);
