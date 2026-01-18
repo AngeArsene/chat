@@ -28,6 +28,12 @@ use AngeArsene\Chat\Concerns\NormalizesParticipantsOrConversations;
 final class AddFeatureTest extends TestCase
 {
     use ManagesParticipantAssertions;
+
+    private function addParticipantsToConversations(mixed $participants, array $conversations): void
+    {
+        Chat::conversations()->set($conversations[1])->add($participants);
+        Chat::conversations()->set($conversations[2])->add($participants);
+    }
     
     public function test_chat_can_add_single_participant_to_conversation_after_it_was_created(): void
     {
@@ -35,8 +41,7 @@ final class AddFeatureTest extends TestCase
 
         $conversations = $this->createConversations();
 
-        Chat::conversations()->set($conversations[1])->add($participant);
-        Chat::conversations()->set($conversations[2])->add($participant);
+        $this->addParticipantsToConversations($participant, $conversations);
 
         $this->assertParticipantsInConversations($participant, $conversations);
     }
@@ -49,8 +54,7 @@ final class AddFeatureTest extends TestCase
 
         $this->expectException(\TypeError::class);
 
-        Chat::conversations()->set($conversations[1])->add($participant);
-        Chat::conversations()->set($conversations[2])->add($participant);
+        $this->addParticipantsToConversations($participant, $conversations);
     }
     
     public function test_chat_can_add_array_participants_to_conversation_after_it_was_created(): void
@@ -59,8 +63,7 @@ final class AddFeatureTest extends TestCase
 
         $conversations = $this->createConversations();
 
-        Chat::conversations()->set($conversations[1])->add($participants);
-        Chat::conversations()->set($conversations[2])->add($participants);
+        $this->addParticipantsToConversations($participants, $conversations);
 
         $this->assertParticipantsInConversations($participants, $conversations);
     }
@@ -73,8 +76,7 @@ final class AddFeatureTest extends TestCase
 
         $this->expectException(\InvalidArgumentException::class);
 
-        Chat::conversations()->set($conversations[1])->add($participants);
-        Chat::conversations()->set($conversations[2])->add($participants);
+        $this->addParticipantsToConversations($participants, $conversations);
     }
     
     public function test_chat_can_add_collection_participants_to_conversation_after_it_was_created(): void
@@ -83,8 +85,7 @@ final class AddFeatureTest extends TestCase
 
         $conversations = $this->createConversations();
 
-        Chat::conversations()->set($conversations[1])->add($participants);
-        Chat::conversations()->set($conversations[2])->add($participants);
+        $this->addParticipantsToConversations($participants, $conversations);
 
         $this->assertParticipantsInConversations($participants, $conversations);
     }
@@ -97,7 +98,6 @@ final class AddFeatureTest extends TestCase
 
         $this->expectException(\InvalidArgumentException::class);
 
-        Chat::conversations()->set($conversations[1])->add($participants);
-        Chat::conversations()->set($conversations[2])->add($participants);
+        $this->addParticipantsToConversations($participants, $conversations);
     }
 }
