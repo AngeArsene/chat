@@ -41,5 +41,121 @@ final class RemoveFeatureTest extends TestCase
 
         $this->assertCount(0, $conversations[1]->participants);
         $this->assertCount(0, $conversations[2]->participants);
+        
+        $this->assertDatabaseCount('participations', 0);
+
+        $this->assertDatabaseMissing('participations', [
+            'conversation_id' => $conversations[1]->id,
+            'messageable_id' => $participant->getKey(),
+            'messageable_type' => get_class($participant)
+        ]);
+        $this->assertDatabaseMissing('participations', [
+            'conversation_id' => $conversations[2]->id,
+            'messageable_id' => $participant->getKey(),
+            'messageable_type' => get_class($participant)
+        ]);
+    }
+
+    public function test_chat_cannot_remove_single_non_participant_to_conversations(): void
+    {
+        $participant = $this->createParticipants(isValid: false);
+
+        $conversations = $this->createConversations($participant);
+
+        Chat::conversations()->set($conversations[1])->remove($participant);
+        Chat::conversations()->set($conversations[2])->remove($participant);
+
+        $this->assertCount(0, $conversations[1]->participants);
+        $this->assertCount(0, $conversations[2]->participants);
+        
+        $this->assertDatabaseCount('participations', 0);
+
+        $this->assertDatabaseMissing('participations', [
+            'conversation_id' => $conversations[1]->id,
+            'messageable_id' => $participant->getKey(),
+            'messageable_type' => get_class($participant)
+        ]);
+        $this->assertDatabaseMissing('participations', [
+            'conversation_id' => $conversations[2]->id,
+            'messageable_id' => $participant->getKey(),
+            'messageable_type' => get_class($participant)
+        ]);
+    }
+
+    public function test_chat_can_remove_array_participants_to_conversations(): void
+    {
+        /** @var array */
+        $participants = $this->createParticipants(count: 2, arr: true);
+
+        $conversations = $this->createConversations($participants);
+
+        Chat::conversations()->set($conversations[1])->remove($participants);
+        Chat::conversations()->set($conversations[2])->remove($participants);
+
+        $this->assertCount(0, $conversations[1]->participants);
+        $this->assertCount(0, $conversations[2]->participants);
+
+        $this->assertDatabaseCount('participations', 0);
+
+        $this->assertDatabaseMissing('participations', [
+            'conversation_id' => $conversations[1]->id,
+            'messageable_id' => $participants[0]->getKey(),
+            'messageable_type' => get_class($participants[0])
+        ]);
+
+        $this->assertDatabaseMissing('participations', [
+            'conversation_id' => $conversations[1]->id,
+            'messageable_id' => $participants[1]->getKey(),
+            'messageable_type' => get_class($participants[1])
+        ]);
+        $this->assertDatabaseMissing('participations', [
+            'conversation_id' => $conversations[2]->id,
+            'messageable_id' => $participants[0]->getKey(),
+            'messageable_type' => get_class($participants[0])
+        ]);
+        $this->assertDatabaseMissing('participations', [
+            'conversation_id' => $conversations[2]->id,
+            'messageable_id' => $participants[1]->getKey(),
+            'messageable_type' => get_class($participants[1])
+        ]);
+    }
+
+    
+    public function test_chat_can_remove_collection_participants_to_conversations(): void
+    {
+        /** @var \Illuminate\Database\Eloquent\Collection */
+        $participants = $this->createParticipants(count: 2, arr: false);
+
+        $conversations = $this->createConversations($participants);
+
+        Chat::conversations()->set($conversations[1])->remove($participants);
+        Chat::conversations()->set($conversations[2])->remove($participants);
+
+        $this->assertCount(0, $conversations[1]->participants);
+        $this->assertCount(0, $conversations[2]->participants);
+
+        $this->assertDatabaseCount('participations', 0);
+
+        $this->assertDatabaseMissing('participations', [
+            'conversation_id' => $conversations[1]->id,
+            'messageable_id' => $participants[0]->getKey(),
+            'messageable_type' => get_class($participants[0])
+        ]);
+
+        $this->assertDatabaseMissing('participations', [
+            'conversation_id' => $conversations[1]->id,
+            'messageable_id' => $participants[1]->getKey(),
+            'messageable_type' => get_class($participants[1])
+        ]);
+        $this->assertDatabaseMissing('participations', [
+            'conversation_id' => $conversations[2]->id,
+            'messageable_id' => $participants[0]->getKey(),
+            'messageable_type' => get_class($participants[0])
+        ]);
+        $this->assertDatabaseMissing('participations', [
+            'conversation_id' => $conversations[2]->id,
+            'messageable_id' => $participants[1]->getKey(),
+            'messageable_type' => get_class($participants[1])
+        ]);
     }
 }
