@@ -87,32 +87,7 @@ final class RemoveFeatureTest extends TestCase
 
         $this->removeParticipantsFromConversations($participants, $conversations);
 
-        $this->assertCount(0, $conversations[1]->participants);
-        $this->assertCount(0, $conversations[2]->participants);
-
-        $this->assertDatabaseCount('participations', 0);
-
-        $this->assertDatabaseMissing('participations', [
-            'conversation_id' => $conversations[1]->id,
-            'messageable_id' => $participants[0]->getKey(),
-            'messageable_type' => get_class($participants[0])
-        ]);
-
-        $this->assertDatabaseMissing('participations', [
-            'conversation_id' => $conversations[1]->id,
-            'messageable_id' => $participants[1]->getKey(),
-            'messageable_type' => get_class($participants[1])
-        ]);
-        $this->assertDatabaseMissing('participations', [
-            'conversation_id' => $conversations[2]->id,
-            'messageable_id' => $participants[0]->getKey(),
-            'messageable_type' => get_class($participants[0])
-        ]);
-        $this->assertDatabaseMissing('participations', [
-            'conversation_id' => $conversations[2]->id,
-            'messageable_id' => $participants[1]->getKey(),
-            'messageable_type' => get_class($participants[1])
-        ]);
+        $this->assertAllConversationsParticipantsRemoved($conversations, $participants);
     }
 
     public function test_chat_cannot_remove_array_non_participants_from_conversations(): void
@@ -135,32 +110,7 @@ final class RemoveFeatureTest extends TestCase
 
         $this->removeParticipantsFromConversations($participants, $conversations);
 
-        $this->assertCount(0, $conversations[1]->participants);
-        $this->assertCount(0, $conversations[2]->participants);
-
-        $this->assertDatabaseCount('participations', 0);
-
-        $this->assertDatabaseMissing('participations', [
-            'conversation_id' => $conversations[1]->id,
-            'messageable_id' => $participants[0]->getKey(),
-            'messageable_type' => get_class($participants[0])
-        ]);
-
-        $this->assertDatabaseMissing('participations', [
-            'conversation_id' => $conversations[1]->id,
-            'messageable_id' => $participants[1]->getKey(),
-            'messageable_type' => get_class($participants[1])
-        ]);
-        $this->assertDatabaseMissing('participations', [
-            'conversation_id' => $conversations[2]->id,
-            'messageable_id' => $participants[0]->getKey(),
-            'messageable_type' => get_class($participants[0])
-        ]);
-        $this->assertDatabaseMissing('participations', [
-            'conversation_id' => $conversations[2]->id,
-            'messageable_id' => $participants[1]->getKey(),
-            'messageable_type' => get_class($participants[1])
-        ]);
+        $this->assertAllConversationsParticipantsRemoved($conversations, $participants);
     }
 
     public function test_chat_cannot_remove_collection_non_participants_from_conversations(): void
