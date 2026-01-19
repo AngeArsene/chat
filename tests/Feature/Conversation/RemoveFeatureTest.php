@@ -110,8 +110,7 @@ final class RemoveFeatureTest extends TestCase
             'messageable_type' => get_class($participants[1])
         ]);
     }
-
-    
+ 
     public function test_chat_cannot_remove_array_non_participants_from_conversations(): void
     {
         $participants = $this->createParticipants(isValid: false, count: 2, arr: true);
@@ -122,7 +121,6 @@ final class RemoveFeatureTest extends TestCase
 
         $this->removeParticipantsFromConversations($participants, $conversations);
     }
-
     
     public function test_chat_can_remove_collection_participants_to_conversations(): void
     {
@@ -160,5 +158,16 @@ final class RemoveFeatureTest extends TestCase
             'messageable_id' => $participants[1]->getKey(),
             'messageable_type' => get_class($participants[1])
         ]);
+    }
+     
+    public function test_chat_cannot_remove_collection_non_participants_from_conversations(): void
+    {
+        $participants = $this->createParticipants(isValid: false, count: 2, arr: false);
+
+        $conversations = $this->createConversations($this->createParticipants());
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->removeParticipantsFromConversations($participants, $conversations);
     }
 }
