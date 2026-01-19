@@ -42,8 +42,7 @@ final class RemoveFeatureTest extends TestCase
 
         $conversations = $this->createConversations($participant);
 
-        Chat::conversations()->set($conversations[1])->remove($participant);
-        Chat::conversations()->set($conversations[2])->remove($participant);
+        $this->removeParticipantsFromConversations($participant, $conversations);
 
         $this->assertCount(0, $conversations[1]->participants);
         $this->assertCount(0, $conversations[2]->participants);
@@ -80,8 +79,7 @@ final class RemoveFeatureTest extends TestCase
 
         $conversations = $this->createConversations($participants);
 
-        Chat::conversations()->set($conversations[1])->remove($participants);
-        Chat::conversations()->set($conversations[2])->remove($participants);
+        $this->removeParticipantsFromConversations($participants, $conversations);
 
         $this->assertCount(0, $conversations[1]->participants);
         $this->assertCount(0, $conversations[2]->participants);
@@ -129,8 +127,7 @@ final class RemoveFeatureTest extends TestCase
 
         $conversations = $this->createConversations($participants);
 
-        Chat::conversations()->set($conversations[1])->remove($participants);
-        Chat::conversations()->set($conversations[2])->remove($participants);
+        $this->removeParticipantsFromConversations($participants, $conversations);
 
         $this->assertCount(0, $conversations[1]->participants);
         $this->assertCount(0, $conversations[2]->participants);
