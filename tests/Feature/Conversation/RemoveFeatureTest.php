@@ -116,7 +116,7 @@ final class RemoveFeatureTest extends TestCase
         $this->assertAllConversationsParticipantsRemoved($conversations, $participants);
     }
 
-    public function test_chat_can_remove_some_array_participants_from_conversations(): void
+    public function test_chat_can_remove_single_participant_from_array_participants_in_conversations(): void
     {
         /** @var array */
         $participants = $this->createParticipants(count: 3, arr: true);
@@ -126,6 +126,19 @@ final class RemoveFeatureTest extends TestCase
         $this->removeParticipantsFromConversations($participants[2], $conversations);
 
         $this->assertConversationsParticipantsRemoved($conversations, $participants[2], 3);
+    }
+
+    public function test_chat_can_remove_array_participants_from_array_participants_in_conversations(): void
+    {
+        /** @var array */
+        $participants = $this->createParticipants(count: 4, arr: true);
+        $participantsToBeRemoved = [$participants[2], $participants[3]];
+
+        $conversations = $this->createConversations($participants);
+
+        $this->removeParticipantsFromConversations($participantsToBeRemoved, $conversations);
+
+        $this->assertConversationsParticipantsRemoved($conversations, $participantsToBeRemoved, 4);
     }
 
     public function test_chat_cannot_remove_array_non_participants_from_conversations(): void
