@@ -7,6 +7,7 @@ namespace AngeArsene\Chat\Tests\Feature\Conversation;
 use AngeArsene\Chat\Facades\Chat;
 use AngeArsene\Chat\Tests\TestCase;
 use AngeArsene\Chat\Chat as ChatChat;
+use AngeArsene\Chat\Tests\Models\User;
 use AngeArsene\Chat\Models\Conversation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversTrait;
@@ -162,6 +163,32 @@ final class RemoveFeatureTest extends TestCase
         $this->removeParticipantsFromConversations($participants, $conversations);
 
         $this->assertAllConversationsParticipantsRemoved($conversations, $participants);
+    }
+
+    public function test_chat_can_remove_single_participant_from_collection_participants_in_conversations(): void
+    {
+        /** @var array */
+        $participants = $this->createParticipants(count: 3, arr: false);
+
+        $conversations = $this->createConversations($participants);
+
+        $this->removeParticipantsFromConversations($participants[2], $conversations);
+
+        $this->assertConversationsParticipantsRemoved($conversations, $participants[2], 3);
+    }
+    
+    public function test_chat_can_remove_collection_participants_from_collection_participants_in_conversations(): void
+    {
+        /** @var \Illuminate\Database\Eloquent\Collection */
+        $participants = $this->createParticipants(count: 4, arr: false);
+        /** @var \Illuminate\Database\Eloquent\Collection */
+        $participantsToBeRemoved = User::latest()->take(2)->get();
+
+        $conversations = $this->createConversations($participants);
+
+        $this->removeParticipantsFromConversations($participantsToBeRemoved, $conversations);
+
+        $this->assertConversationsParticipantsRemoved($conversations, $participantsToBeRemoved, 4);
     }
 
     public function test_chat_cannot_remove_collection_non_participants_from_conversations(): void
