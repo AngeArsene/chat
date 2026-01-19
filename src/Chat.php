@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AngeArsene\Chat;
 
 use AngeArsene\Chat\Models\Conversation;
-use AngeArsene\Chat\Models\Participation;
 use Illuminate\Database\Eloquent\Collection;
 use AngeArsene\Chat\Services\ConversationService;
 use AngeArsene\Chat\Contracts\ConversationParticipantInterface;

@@ -17,16 +17,31 @@ final class ConversationService
     public function __construct(
         private Conversation $conversation,
         private Participation $participation
-    ) {
-    }
+    ) {}
 
-    public function get(Conversation | int $conversation): Conversation
+    public function get(Conversation | int | array $conversation): Conversation
     {
-        return $this->conversation->find(
-            is_int($conversation)
-                ? $conversation
-                : $conversation->id
-        );
+        $id = null;
+
+        switch (gettype($conversation)) {
+            case 'integer':
+                $id = $conversation;
+                break;
+
+            case 'array':
+                if (isset($conversation['id'])) {
+                    $id = $conversation['id'];
+                } else {
+                    throw new \InvalidArgumentException;
+                }
+                break;
+
+            default:
+                $id = $conversation->id;
+                break;
+        }
+        
+        return $this->conversation->find($id);
     }
 
     public function create(
