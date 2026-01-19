@@ -40,10 +40,36 @@ final class RemoveFeatureTest extends TestCase
     {
         $this->assertCount(0, $conversations[1]->participants);
         $this->assertCount(0, $conversations[2]->participants);
-        
+
         $this->assertDatabaseCount('participations', 0);
 
         $participants = $this->normalizeNotToNull($participants);
+
+        foreach ($conversations as $conversation) {
+            foreach ($participants as $participant) {
+                $this->assertDatabaseMissing('participations', [
+                    'conversation_id' => $conversation->id,
+                    'messageable_id' => $participant->getKey(),
+                    'messageable_type' => get_class($participant)
+                ]);
+            }
+        }
+    }
+
+    private function assertConversationsParticipantsRemoved(
+        array $conversations,
+        mixed $participants,
+        int $totalNumberParticipants
+    ): void {
+        $participants = $this->normalizeNotToNull($participants);
+
+        $expectedNumberParticipants   = $totalNumberParticipants - count($participants);
+        $expectedNumberParticipations = $expectedNumberParticipants * count($conversations);
+
+        $this->assertCount($expectedNumberParticipants, $conversations[1]->participants);
+        $this->assertCount($expectedNumberParticipants, $conversations[2]->participants);
+
+        $this->assertDatabaseCount('participations', $expectedNumberParticipations);
 
         foreach ($conversations as $conversation) {
             foreach ($participants as $participant) {
@@ -78,7 +104,7 @@ final class RemoveFeatureTest extends TestCase
         $this->removeParticipantsFromConversations($participant, $conversations);
     }
 
-    public function test_chat_can_remove_array_participants_from_conversations(): void
+    public function test_chat_can_remove_all_array_participants_from_conversations(): void
     {
         /** @var array */
         $participants = $this->createParticipants(count: 2, arr: true);
@@ -88,6 +114,18 @@ final class RemoveFeatureTest extends TestCase
         $this->removeParticipantsFromConversations($participants, $conversations);
 
         $this->assertAllConversationsParticipantsRemoved($conversations, $participants);
+    }
+
+    public function test_chat_can_remove_some_array_participants_from_conversations(): void
+    {
+        /** @var array */
+        $participants = $this->createParticipants(count: 3, arr: true);
+
+        $conversations = $this->createConversations($participants);
+
+        $this->removeParticipantsFromConversations($participants[2], $conversations);
+
+        $this->assertConversationsParticipantsRemoved($conversations, $participants[2], 3);
     }
 
     public function test_chat_cannot_remove_array_non_participants_from_conversations(): void
